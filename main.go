@@ -7,7 +7,12 @@ import (
 	"net/http"
 )
 
-const getme = "https://api.telegram.org/bot<token>/getme"
+const telegramUrl = "https://api.telegram.org/"
+const token = "<token>"
+
+const getMePath = "getme"
+const getUpdatesPath = "getupdates"
+const sendMessagePath = "sendmessage"
 
 type Bot struct {
 	Id        int64  `json:"id"`
@@ -25,7 +30,9 @@ func main() {
 	var body []byte
 	var bot ResponseBot
 
-	resp, err := http.Get(getme)
+	url := fmt.Sprintf("https://api.telegram.org/bot%s/%s", token, getMePath)
+
+	resp, err := http.Get(url)
 	if err != nil {
 		s := err.Error()
 		fmt.Println(s)

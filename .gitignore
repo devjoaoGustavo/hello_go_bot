@@ -1,0 +1,2 @@
+# exclude config file for protect sensitive data, such as Telegram api token
+config.yml

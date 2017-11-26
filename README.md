@@ -5,3 +5,8 @@
 ## Interagindo com Hello Go Bot
 
 Para interagir com o `hello go bot` e ver o que ele faz, basta procurar por @hello_go_bot bo Telegram.
+
+## Pendências
+
+* Construir as estruturas de acordo com a documentação da API
+* Escrever uma documentação decente...

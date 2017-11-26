@@ -1,63 +1,44 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	"net/http"
+	"os"
 )
 
-const telegramUrl = "https://api.telegram.org/"
-const token = "<token>"
-
-const getMePath = "getme"
-const getUpdatesPath = "getupdates"
-const sendMessagePath = "sendmessage"
-
-type Bot struct {
-	Id        int64  `json:"id"`
-	IsBot     bool   `json:"is_bot"`
-	FirstName string `json:"first_name"`
-	UserName  string `json:"last_name`
-}
-
-type ResponseBot struct {
-	Ok     bool `json:"ok"`
-	Result Bot  `json:"result"`
+type Config struct {
+	HelloGoBot struct {
+		Telegram struct {
+			Api struct {
+				EndPoint string
+				Token    string
+			}
+		}
+	} `yaml:"hello_go_bot"`
 }
 
 func main() {
-	var body []byte
-	var bot ResponseBot
-
-	url := fmt.Sprintf("https://api.telegram.org/bot%s/%s", token, getMePath)
-
-	resp, err := http.Get(url)
-	if err != nil {
-		s := err.Error()
+	var config Config
+	configFile, err0 := os.Open("./config.yml")
+	if err0 != nil {
+		s := err0.Error()
 		fmt.Println(s)
 		return
 	}
-
-	defer resp.Body.Close()
-
-	body, err = ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Println(err)
+	configBytes, err1 := ioutil.ReadAll(configFile)
+	if err1 != nil {
+		s := err1.Error()
+		fmt.Println(s)
 		return
 	}
-
-	err = json.Unmarshal(body, &bot)
-	if err != nil {
-		fmt.Println(err)
+	err2 := yaml.Unmarshal(configBytes, &config)
+	if err2 != nil {
+		s := err2.Error()
+		fmt.Println(s)
 		return
 	}
-
-	fmt.Println(bot)
-	fmt.Println("ok:", bot.Ok)
-	fmt.Println("result:", bot.Result)
-	fmt.Println("Id:", bot.Result.Id)
-	fmt.Println("IsBot:", bot.Result.IsBot)
-	fmt.Println("FirstName:", bot.Result.FirstName)
-	fmt.Println("UserName:", bot.Result.UserName)
+	showBotInfo(config)
+	fmt.Println()
+	showUpdates(config)
 }

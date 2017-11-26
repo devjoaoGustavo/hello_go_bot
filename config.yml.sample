@@ -1,0 +1,5 @@
+hello_go_bot:
+  telegram:
+    api:
+      endpoint: https://api.telegram.org
+      token: <token>

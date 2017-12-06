@@ -9,29 +9,23 @@ import (
 
 const getMePath = "getMe"
 
-/*
-TODO: Adicionar todas as propriedades descritas na documentação da API
-https://core.telegram.org/bots/api#getme
-*/
-
 type GetMe struct {
-	Ok     bool `json:"ok"`
-	Result struct {
-		Id        int64  `json:"id"`
-		IsBot     bool   `json:"is_bot"`
-		FirstName string `json:"first_name"`
-		UserName  string `json:"last_name`
-	}
+	Ok     bool
+	Result User
 }
 
 func showBotInfo(config Config) {
 	var body []byte
 	var getMe GetMe
-	url := fmt.Sprintf("%s/bot%s/%s", config.HelloGoBot.Telegram.Api.EndPoint, config.HelloGoBot.Telegram.Api.Token, getMePath)
+	url := fmt.Sprintf(
+		"%s/bot%s/%s",
+		config.HelloGoBot.Telegram.Api.EndPoint,
+		config.HelloGoBot.Telegram.Api.Token,
+		getMePath,
+	)
 	resp, err := http.Get(url)
 	if err != nil {
-		s := err.Error()
-		fmt.Println(s)
+		fmt.Println(err)
 		return
 	}
 	defer resp.Body.Close()
@@ -50,8 +44,9 @@ func showBotInfo(config Config) {
 	fmt.Println("Esta é a estrutura da resposta do método getMe")
 	fmt.Println("ok:", getMe.Ok)
 	fmt.Println("result:", getMe.Result)
-	fmt.Println("Id:", getMe.Result.Id)
-	fmt.Println("IsBot:", getMe.Result.IsBot)
-	fmt.Println("FirstName:", getMe.Result.FirstName)
-	fmt.Println("UserName:", getMe.Result.UserName)
+	fmt.Println("User Id:", getMe.Result.Id)
+	fmt.Println("User IsBot:", getMe.Result.IsBot)
+	fmt.Println("User FirstName:", getMe.Result.FirstName)
+	fmt.Println("User LastName:", getMe.Result.LastName)
+	fmt.Println("User UserName:", getMe.Result.UserName)
 }
